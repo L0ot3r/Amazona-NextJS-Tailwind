@@ -1,8 +1,13 @@
+import React, { useContext } from 'react';
+
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+
+import { Store } from '../../utils/Store';
 
 export default function Layout({ children, title }) {
+	const { state } = useContext(Store);
+	const { cart } = state;
 	return (
 		<>
 			<Head>
@@ -14,29 +19,30 @@ export default function Layout({ children, title }) {
 			<div className='flex min-h-screen flex-col justify-between '>
 				<header>
 					<nav className='flex h-12 px-4 justify-between items-center shadow-md '>
-						<Link href="/">
+						<Link href='/'>
 							<a className='text-lg font-bold '>amazona</a>
 						</Link>
 						<div>
 							<Link href='/cart'>
-								<a className='p-2' >
+								<a className='p-2'>
+									{cart.cartItems.length > 0 && (
+										<span className='badge'>
+											{cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+										</span>
+									)}
 									Cart
-								</a> 
+								</a>
 							</Link>
 							<Link href='/login'>
-								<a className='p-2'>
-									Login
-								</a>
+								<a className='p-2'>Login</a>
 							</Link>
 						</div>
 					</nav>
 				</header>
 
-				<main className='container m-auto mt-4 px-4 '>
-					{children}
-				</main>
+				<main className='container m-auto mt-4 px-4 '>{children}</main>
 
-				<footer className=' flex h-10 justify-center items-center shadow-inner ' >
+				<footer className=' flex h-10 justify-center items-center shadow-inner '>
 					<p>Copyright &copy; 2022 Amazona </p>
 				</footer>
 			</div>

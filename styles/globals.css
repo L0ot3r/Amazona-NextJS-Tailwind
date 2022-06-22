@@ -39,3 +39,16 @@ a {
   hover:bg-amber-400 
   active:bg-amber-500;
 }
+
+.badge {
+  @apply 
+  relative
+  bottom-2
+  rounded-full 
+  bg-red-600 
+  px-2 
+  py-1 
+  text-xs 
+  font-bold 
+  text-white
+}

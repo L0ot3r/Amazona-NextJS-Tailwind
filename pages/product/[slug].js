@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { Layout } from '../../components';
 import { data } from '../../constants';
-import Image from 'next/image';
+import { Store } from '../../utils/Store';
+import { CART_ADD_ITEMS } from '../../constants/actionTypes';
 
 export default function ProductDetails() {
+	const { state, dispatch } = useContext(Store);
 	const { query } = useRouter();
 	const { slug } = query;
 	const product = data.products.laptop.find(
@@ -14,6 +17,22 @@ export default function ProductDetails() {
 	);
 
 	if (!product) return <div>Product Not Found</div>;
+
+	const addToCartHandler = () => {
+		const existItem = state.cart.cartItems.find(
+			(x) =>
+				x.name.toLowerCase().replace(/ /g, '-') ===
+				product.name.toLowerCase().replace(/ /g, '-')
+		);
+		const quantity = existItem ? existItem.quantity + 1 : 1
+
+		if(product.countInStock < quantity){
+			alert('Sorry. Product out of stock !')
+			return;
+		}
+		dispatch({ type: CART_ADD_ITEMS, payload: { ...product, quantity } });
+	};
+
 
 	return (
 		<Layout title={product.name}>
@@ -28,7 +47,7 @@ export default function ProductDetails() {
 						width={640}
 						height={640}
 						layout='responsive'
-						className='rounded'
+						className='rounded-lg'
 					/>
 				</div>
 
@@ -56,7 +75,12 @@ export default function ProductDetails() {
 							<div>Status</div>
 							<div>{product.countInStock > 0 ? 'In stock' : 'Unavailable'}</div>
 						</div>
-						<button className='primary-button w-full'>Add to cart</button>
+						<button
+							className='primary-button w-full'
+							onClick={addToCartHandler}
+						>
+							Add to cart
+						</button>
 					</div>
 				</div>
 			</div>

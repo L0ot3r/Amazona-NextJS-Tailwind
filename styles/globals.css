@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	box-sizing: border-box;
+}
+
 html,
 body {
 	padding: 0;
@@ -16,17 +20,27 @@ a {
 	text-decoration: none;
 }
 
-* {
-	box-sizing: border-box;
+.card {
+	@apply mb-5
+  bg-white
+  block 
+  border 
+  rounded-lg 
+  shadow-md
+  border-gray-200 
+  dark:bg-gray-800 
+  dark:border-gray-700;
 }
 
-.card {
-	@apply mb-5 
-  block 
-  rounded-lg 
+.card-shopping {
+	@apply max-w-sm 
+  bg-white 
   border 
+  rounded-lg 
+  shadow-md 
   border-gray-200 
-  shadow-md;
+  dark:bg-gray-800 
+  dark:border-gray-700;
 }
 
 .primary-button {
@@ -39,16 +53,60 @@ a {
   hover:bg-amber-400 
   active:bg-amber-500;
 }
+.secondary-button {
+	@apply rounded 
+  bg-blue-500 
+  text-white
+  py-2 
+  px-4 
+  shadow 
+  outline-none 
+  hover:bg-blue-600 
+  active:bg-blue-700;
+}
 
 .badge {
-  @apply 
-  relative
-  bottom-2
+  width: 18px;
+  height: 18px;
+  padding: 2px;
+  font-size: 10px;
+	@apply relative
+  flex
+  justify-center
+  items-center
+  bottom-1
   rounded-full 
   bg-red-600 
-  px-2 
-  py-1 
-  text-xs 
+  /* px-2 
+  py-1 */
+  /* text-xs */
   font-bold 
-  text-white
+  text-white;
+}
+
+.select-box {
+	@apply appearance-none
+      px-3
+      py-1.5
+      text-center
+      font-normal
+      text-gray-700
+      bg-white bg-clip-padding bg-no-repeat
+      border border-solid border-gray-300
+      rounded
+      transition
+      ease-in-out
+      m-0
+      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none;
+}
+
+input,
+textarea {
+	@apply rounded
+  border
+  border-indigo-200
+  p-2
+  outline-none
+  ring-indigo-300
+  focus:ring;
 }

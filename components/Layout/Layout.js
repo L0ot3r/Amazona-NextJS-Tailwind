@@ -1,13 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 import Head from 'next/head';
 import Link from 'next/link';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Store } from '../../utils/Store';
+import { useEffect } from 'react';
 
 export default function Layout({ children, title }) {
+	const { status, data: session } = useSession();
+
 	const { state } = useContext(Store);
 	const { cart } = state;
+	const [cartItemsCount, setCartItemsCount] = useState(0);
+	useEffect(() => {
+		setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
+	}, [cart.cartItems]);
+
 	return (
 		<>
 			<Head>
@@ -16,25 +28,31 @@ export default function Layout({ children, title }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<div className='flex min-h-screen flex-col justify-between '>
+			<ToastContainer position='bottom-center' limit={1} />
+
+			<div className='flex min-h-screen flex-col justify-between'>
 				<header>
-					<nav className='flex h-12 px-4 justify-between items-center shadow-md '>
+					<nav className='flex h-12 px-4 justify-between items-center shadow-md bg-white'>
 						<Link href='/'>
 							<a className='text-lg font-bold '>amazona</a>
 						</Link>
-						<div>
+						<div className='flex justify-center items-center'>
+							{status === 'loading' ? (
+								'Loading'
+							) : session?.user ? (
+								session.user.name
+							) : (
+								<Link href='/login'>
+									<a className='p-2'>Se connecter</a>
+								</Link>
+							)}
 							<Link href='/cart'>
-								<a className='p-2'>
-									{cart.cartItems.length > 0 && (
-										<span className='badge'>
-											{cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-										</span>
+								<a className='p-2 flex'>
+									{cartItemsCount > 0 && (
+										<div className='badge'>{cartItemsCount}</div>
 									)}
-									Cart
+									Panier
 								</a>
-							</Link>
-							<Link href='/login'>
-								<a className='p-2'>Login</a>
 							</Link>
 						</div>
 					</nav>
